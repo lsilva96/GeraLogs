@@ -1,0 +1,11 @@
+*.c
+*.obj
+*.map
+*.exe
+*.bat
+*.log
+*.ppo
+*.dbf
+*.dbt
+*.ntx
+xbuild.windows.ini
