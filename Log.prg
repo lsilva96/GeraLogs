@@ -4,16 +4,22 @@
 #define DEBUG_LOGS   .T.
 
 FUNCTION main()
-   LOCAL nNumero := 0
+   LOCAL nNumero     := 0
+   PUBLIC lLogHead   := .F.
 
    IF nNumero > 0
-      logLocal("#nNumero>0")
+      logLocal("IF -> nNumero > 0")
       //Regras
    ELSE
-      logLocal("#nNumero<=0")
+      logLocal("IF -> nNumero <= 0")
       //Regras
    ENDIF
 
+   SWITCH nNumero
+      CASE 0
+         logLocal("Switch -> Case1 -> #nNumero = 0")
+         EXIT
+   END
 RETURN NIL
 
 
@@ -30,23 +36,29 @@ RETURN
 // Escreve no arquivo de log
 FUNCTION logWriteFile
    PARAM cMessage, cType
-   LOCAL cLine, bWrite, nLogFile
+   LOCAL nLogFile, cLine, bWrite
 
    nLogFile := FOpen(DEBUG_FILE, 1)
 
-   IF (FError() <> 0); nLogFile := FCreate(DEBUG_FILE); ENDIF   
+   IF FError() <> 0
+      nLogFile := FCreate(DEBUG_FILE)
+   ENDIF
 
-   bWrite := <| cLine | FSeek(nLogFile, 0, FS_END)
-                        cLine := cLine + Chr(13)+Chr(10)
-                        IF FWrite(nLogFile, cLine) <> Len(cLine)
-                           ? "Error while writing a file:", FError()
-                        ENDIF >
+   bWrite := <|cLine| 
+      FSeek(nLogFile, 0, FS_END)
+      cLine := cLine + Chr(13)+Chr(10)
+      IF FWrite(nLogFile, cLine) <> Len(cLine)
+         ? "Error while writing a file:", FError()
+      ENDIF 
+   >
      
+   IF lLogHead = .F.
+      Eval(bWrite, "########################################################################")
+      Eval(bWrite, PadR("## " + cType + " | " + DtoC(Date()) + " - " + Time() + " ", 72, "#"))
+      Eval(bWrite, "########################################################################" + Chr(10))
+      lLogHead := .T.
+   ENDIF
 
-   Eval(bWrite, "########################################################################")
-   Eval(bWrite, cType + " | " + DtoC(Date()) + " - " + Time() + ": " + Chr(10)+Chr(13))
-   AEVAL(HB_ATokens(cMessage, chr(10)), bWrite)
-   Eval(bWrite, "########################################################################")
-   Eval(bWrite, " ")   
+   AEVal(HB_ATokens(cMessage, chr(10)), bWrite)
    FClose(nLogFile)
 RETURN NIL
