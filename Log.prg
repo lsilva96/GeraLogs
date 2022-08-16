@@ -80,12 +80,16 @@ PROCEDURE LOG_WRITE
    >
      
    IF nLogHead = 1 .AND. lLogHeadAdded = .F. 
+      Eval(bWrite, " ")
       Eval(bWrite, "########################################################################")
-      Eval(bWrite, PadR("## " + cType + " | " + DtoC(Date()) + " - " + Time() + " ", 72, "#"))
+      Eval(bWrite, PadC(" Log Iniciado | " + DtoC(Date()) + " - " + Time() + " ", 72, "#"))
       Eval(bWrite, "########################################################################" + Chr(10))
       lLogHeadAdded := .T.
    ENDIF
 
+   Eval(bWrite, "# " + cType + " | " + DtoC(Date()) + " - " + Time() + ": ")
    AEVal(HB_ATokens(cMessage, chr(10)), bWrite)
+   Eval(bWrite, " ")
+
    FClose(nLogFile)
 RETURN
