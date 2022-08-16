@@ -1,24 +1,31 @@
-#include "FileIO.ch"
-
-// Exemplo de Uso
-FUNCTION main()   
-   LOCAL nNumero     := 0
-   LOG_INIT()
-
-   IF nNumero > 0
-      LOG_FLOW("IF -> nNumero > 0")
-      //Regras
-   ELSE
-      LOG_FLOW("IF -> nNumero <= 0")
-      //Regras
-   ENDIF
-
-   SWITCH nNumero
-      CASE 0
-         LOG_FLOW("Switch -> Case1 -> #nNumero = 0")
-         EXIT
-   END
-RETURN NIL
+/*
+ * Funções de log para debug de programas escritos em xHarbour
+ * ATENÇÃO: Realizar o include do arquivo log.pr no final do arquivo de código
+ *          Verificar se o arquivo log.ini está presente e configurar conforme necessidade
+ *
+ * PROCEDIMENTOS: 
+ * LOG_INIT()  - Carrega os parâmetros necessários para o funcionamento, iniciar na Main()
+ *               após a declaração das variáveis
+ *
+ * LOG_START() - !NÃO CHAMAR DIRETAMENTE!
+ *
+ * LOG_CLEAR() - Limpa o arquivo de log
+ *
+ * LOG_FLOW()  - Adiciona um log do fluxo de execução do script, para isso, defina
+ *               em alguns pontos do código palavras chave para identificar o fluxo 
+ *               de execução
+ *               PARAMS: cLocalizador = Identificador no código, ex: "IF -> nNumero <= 0" 
+ *
+ * LOG_WRITE() - !NÃO CHAMAR DIRETAMENTE!
+ * 
+ * LOG_VAR()   - Em breve - Adiciona um log com o nome da variável, tipo e valor
+ *               PARAMS: cVarName = Nome da variável
+ *
+ * LOG_API()   - Em breve - Adiciona um log da chamada da API e seu resultado
+ *               PARAMS: cURL     = URL da requisição
+ *                       cSend    = Requisição enviada
+ *                       cReturn  = Requisição recebida
+ */
 
 
 // Inicia o processo de log
