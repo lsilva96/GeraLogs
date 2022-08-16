@@ -7,6 +7,7 @@ FUNCTION main()
    LOCAL nNumero     := 0
    PUBLIC lLogHead   := .F.
 
+   clearLog()
    IF nNumero > 0
       logLocal("IF -> nNumero > 0")
       //Regras
@@ -21,6 +22,12 @@ FUNCTION main()
          EXIT
    END
 RETURN NIL
+
+
+// Apaga o arquivo e cria novamente
+PROCEDURE clearLog
+   FClose(FCreate(DEBUG_FILE))
+RETURN
 
 
 // Gera o log indicando onde o script passou
