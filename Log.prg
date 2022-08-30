@@ -1,30 +1,30 @@
 /*
- * Funções de log para debug de programas escritos em xHarbour
- * ATENÇÃO: Realizar o include do arquivo log.pr no final do arquivo de código
- *          Verificar se o arquivo log.ini está presente e configurar conforme necessidade
+ * FunÃ§Ãµes de log para debug de programas escritos em xHarbour
+ * ATENÃ‡ÃƒO: Realizar o include do arquivo log.pr no final do arquivo de cÃ³digo
+ *          Verificar se o arquivo log.ini estÃ¡ presente e configurar conforme necessidade
  *
  * PROCEDIMENTOS: 
- * LOG_INIT()  - Carrega os parâmetros necessários para o funcionamento, iniciar na Main()
- *               após a declaração das variáveis
+ * LOG_INIT()  - Carrega os parÃ¢metros necessÃ¡rios para o funcionamento, iniciar na Main()
+ *               apÃ³s a declaraÃ§Ã£o das variÃ¡veis
  *
- * LOG_START() - !NÃO CHAMAR DIRETAMENTE!
+ * LOG_START() - !NÃƒO CHAMAR DIRETAMENTE!
  *
  * LOG_CLEAR() - Limpa o arquivo de log
  *
- * LOG_FLOW()  - Adiciona um log do fluxo de execução do script, para isso, defina
- *               em alguns pontos do código palavras chave para identificar o fluxo 
- *               de execução
- *               PARAMS: cLocalizador = Identificador no código, ex: "IF -> nNumero <= 0" 
+ * LOG_FLOW()  - Adiciona um log do fluxo de execuÃ§Ã£o do script, para isso, defina
+ *               em alguns pontos do cÃ³digo palavras chave para identificar o fluxo 
+ *               de execuÃ§Ã£o
+ *               PARAMS: cLocalizador = Identificador no cÃ³digo, ex: "IF -> nNumero <= 0" 
  *
- * LOG_WRITE() - !NÃO CHAMAR DIRETAMENTE!
+ * LOG_WRITE() - !NÃƒO CHAMAR DIRETAMENTE!
  * 
- * LOG_VAR()   - Em breve - Adiciona um log com o nome da variável, tipo e valor
- *               PARAMS: cVarName = Nome da variável
+ * LOG_VAR()   - Em breve - Adiciona um log com o nome da variÃ¡vel, tipo e valor
+ *               PARAMS: cVarName = Nome da variÃ¡vel
  *
  * LOG_API()   - Em breve - Adiciona um log da chamada da API e seu resultado
- *               PARAMS: cURL     = URL da requisição
- *                       cSend    = Requisição enviada
- *                       cReturn  = Requisição recebida
+ *               PARAMS: cURL     = URL da requisiÃ§Ã£o
+ *                       cSend    = RequisiÃ§Ã£o enviada
+ *                       cReturn  = RequisiÃ§Ã£o recebida
  */
 
 
@@ -35,7 +35,7 @@ PROCEDURE LOG_INIT
 RETURN
 
 
-// Lê o arquivo INI e inicia as variáveis públicas
+// LÃª o arquivo INI e inicia as variÃ¡veis pÃºblicas
 PROCEDURE LOG_START
    LOCAL    hIniData       := HB_ReadIni( "log.ini" )
    PUBLIC   nLogDebug      := CtoN(hIniData["LOG"]['status'])
@@ -44,7 +44,7 @@ PROCEDURE LOG_START
    PUBLIC   nLogClear      := CtoN(hIniData["LOG"]['clear'])
    PUBLIC   lLogHeadAdded  := .F.
 
-   IF nLogClear = 1
+   IF nLogClear == 1
       LOG_CLEAR()
    ENDIF
 RETURN
@@ -52,7 +52,7 @@ RETURN
 
 // Apaga o arquivo e cria novamente
 PROCEDURE LOG_CLEAR   
-   IF nLogDebug = 1
+   IF nLogDebug == 1
       FClose(FCreate(cLogFile))
    ENDIF
 RETURN
@@ -61,8 +61,22 @@ RETURN
 // Gera o log indicando onde o script passou
 PROCEDURE LOG_FLOW
    PARAM cLocalizador
-   IF nLogDebug = 1
-      LOG_WRITE(cLocalizador, "Debug de Execução")
+   IF nLogDebug == 1
+      LOG_WRITE(cLocalizador, "Debug de ExecuÃ§Ã£o")
+   ENDIF
+RETURN
+
+
+// Gera o log com o conteÃºdo da variÃ¡vel e o tipo
+PROCEDURE LOG_VAR
+   PARAM xVar, cVarname
+   
+   Default(@cVarname, 'notInformed')
+   
+   IF Valtype(xVar) <> "U"
+      LOG_WRITE("Tipo: "+ Valtype(xVar) + Chr(10) + "Valor: " + HB_DumpVar(xVar), "Debug da VariÃ¡vel " + cVarName)
+   ELSE
+      LOG_WRITE("Tipo: "+ Valtype(xVar) + Chr(10) + "Valor: VariÃ¡vel Vazia", "Debug da VariÃ¡vel " + cVarName)
    ENDIF
 RETURN
 
@@ -86,7 +100,7 @@ PROCEDURE LOG_WRITE
       ENDIF 
    >
      
-   IF nLogHead = 1 .AND. lLogHeadAdded = .F. 
+   IF nLogHead == 1 .AND. lLogHeadAdded == .F. 
       Eval(bWrite, " ")
       Eval(bWrite, "########################################################################")
       Eval(bWrite, PadC(" Log Iniciado | " + DtoC(Date()) + " - " + Time() + " ", 72, "#"))
