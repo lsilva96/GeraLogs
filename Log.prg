@@ -18,8 +18,9 @@
  *
  * LOG_WRITE() - !NÃO CHAMAR DIRETAMENTE!
  * 
- * LOG_VAR()   - Em breve - Adiciona um log com o nome da variável, tipo e valor
- *               PARAMS: cVarName = Nome da variável
+ * LOG_VAR()   - Adiciona um log com o nome da variável, tipo e valor
+ *               PARAMS: xVar     = Variável
+ *                       cVarName = Nome da variável
  *
  * LOG_API()   - Em breve - Adiciona um log da chamada da API e seu resultado
  *               PARAMS: cURL     = URL da requisição
